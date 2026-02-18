@@ -9,7 +9,7 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
-import { FormControl, FormLabel, Select, MenuItem } from "@mui/joy";
+import { FormControl, FormLabel} from "@mui/joy";
 import Input from "@mui/joy/Input";
 import IconButton from "@mui/joy/IconButton";
 import Stack from "@mui/joy/Stack";
@@ -30,7 +30,6 @@ import {
 } from "firebase/storage";
 import { storage } from "../../firebaseconfig";
 import { uuidv4 } from '@firebase/util';
-import { CircularProgress } from "@mui/material";
 import { useUserData } from '../Contexts/UserContext.jsx';
 import DOMPurify from "dompurify";
 import { validateFile } from '../../utils/fileValidation';
