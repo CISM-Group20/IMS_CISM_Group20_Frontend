@@ -33,6 +33,8 @@ import { uuidv4 } from '@firebase/util';
 import { CircularProgress } from "@mui/material";
 import { useUserData } from '../Contexts/UserContext.jsx';
 import DOMPurify from "dompurify";
+import { validateFile } from '../../utils/fileValidation';
+
 
 // Validation functions
 const validateEmail = (email) =>
@@ -63,6 +65,9 @@ const isSafeFileName = (name) => {
   // Only allow alphanumeric, dash, underscore, and dot
   return /^[a-zA-Z0-9._-]+$/.test(name);
 };
+
+
+
 
 export default function Profile() {
   const [role, setRole] = useState("");
@@ -204,9 +209,11 @@ export default function Profile() {
       });
       return;
     }
-    const imagePath = `img/${image.name + uuidv4()}`;
-    const imageRef = ref(storage,imagePath);
+   
     const uploadFile = uploadBytesResumable(imageRef, image);
+    const fileExtension = image.name.split('.').pop().toLowerCase();
+const imagePath = `img/${uuidv4()}.${fileExtension}`;
+const imageRef = ref(storage, imagePath);1
   
     uploadFile.on('state_changed', (snapshot) => {
       const progress = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100);
@@ -371,12 +378,26 @@ const handleSubmit = (e) => {
                     />
                   </AspectRatio>
                   <input
-                      accept="image/*"
+                      accept="image/jpeg,image/png"
                       style={{ display: 'none' }}
                       id="icon-button-file"
                       type="file"
                       onChange={(event) => {
-                        setImage(event.target.files[0]);
+                        const file = event.target.files[0];
+    const { isValid, errors } = validateFile(file, 'image');
+    
+    if (!isValid) {
+      Swal.fire({
+        title: 'Invalid Image',
+        text: errors.join(' '),
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      event.target.value = '';
+      return;
+    }
+    
+    setImage(file);
                       }}
                     />
                  <label htmlFor="icon-button-file">
