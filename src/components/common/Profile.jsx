@@ -55,6 +55,7 @@ export default function Profile() {
   const [oldImagePath, setOldImagePath] = useState(null);
   const decodedToken = jwtDecode(token);
   const userRole = decodedToken.role;
+  
  
   if (userRole === 'intern') {
     Swal.fire({
